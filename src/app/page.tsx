@@ -1,4 +1,5 @@
-import MaxWidthWrapper from "@/components/maxWidthWrapper";
+import { Icons } from "@/components/Icons";
+import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   ArrowDownToLine,
@@ -156,6 +157,7 @@ export default function Home() {
                 </div>
               </div>
             ))}
+            <Icons.logo className="w-10 h-10" />
           </div>
         </MaxWidthWrapper>
       </section>
