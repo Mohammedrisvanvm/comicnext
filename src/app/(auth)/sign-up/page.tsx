@@ -1,21 +1,28 @@
 "use client";
 import { Icons } from "@/components/Icons";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { AuthCredentialsValidator, TAuthCredentialsValidator } from "@/lib/validators/account-validator-credentials";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { zodResolver} from "@hookform/resolvers/zod"
-import {z} from "zod"
- 
+
 const Page = () => {
-  const AuthCredentialsValidator=z.object({
-    email:z.string().email(),
-    password:z.string().min(8,{message:"password must be 8 charaters long."})
-  })
-  const {register,handleSubmit,formState:{errors,}} = useForm({resolver:zodResolver(AuthCredentialsValidator)});
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<TAuthCredentialsValidator>({
+    resolver: zodResolver(AuthCredentialsValidator),
+  });
+const onSubmit=({email,password}:TAuthCredentialsValidator)=>{
+
+}
+
   return (
     <>
       <div className="container relative flex pt-20 felx-col items-center justify-center lg:px-0">
@@ -33,12 +40,13 @@ const Page = () => {
           </div>
 
           <div className="grif gap-6">
-            <form>
+            <form onSubmit={handleSubmit(onSubmit)}>
               <div className="grid gap-2">
                 <div className="grid gap-1 py-2"></div>
                 <Label htmlFor="email">Email</Label>
                 <Input
-                  className={cn({ "focus-visible:ring-red-500": true })}
+                  {...register("email")}
+                  className={cn({ "focus-visible:ring-red-500": errors.email })}
                   placeholder="you@example.com"
                 />
               </div>
@@ -46,7 +54,8 @@ const Page = () => {
                 <div className="grid gap-1 py-2"></div>
                 <Label htmlFor="password">Password</Label>
                 <Input
-                  className={cn({ "focus-visible:ring-red-500": true })}
+                 {...register("password")}
+                  className={cn({ "focus-visible:ring-red-500": errors.password })}
                   placeholder="*********"
                 />
                 <Button>Sign Up</Button>
