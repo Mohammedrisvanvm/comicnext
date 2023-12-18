@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { AuthCredentialsValidator, TAuthCredentialsValidator } from "@/lib/validators/account-validator-credentials";
+import { trpc } from "@/trpc/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -19,6 +20,10 @@ const Page = () => {
   } = useForm<TAuthCredentialsValidator>({
     resolver: zodResolver(AuthCredentialsValidator),
   });
+
+  // const {data} =trpc.auth.
+  // console.log(data);
+  
 const onSubmit=({email,password}:TAuthCredentialsValidator)=>{
 
 }

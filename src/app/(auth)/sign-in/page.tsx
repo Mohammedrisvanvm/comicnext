@@ -1,3 +1,5 @@
+"use client"
+
 import { Icons } from "@/components/Icons";
 import { buttonVariants } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
