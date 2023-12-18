@@ -9,6 +9,7 @@ export default buildConfig({
   collections: [],
   routes: {
     admin: "/sell",
+   
   },
   admin: {
     bundler: webpackBundler(),
