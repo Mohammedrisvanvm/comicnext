@@ -4,15 +4,20 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
-import { AuthCredentialsValidator, TAuthCredentialsValidator } from "@/lib/validators/account-validator-credentials";
+import {
+  AuthCredentialsValidator,
+  TAuthCredentialsValidator,
+} from "@/lib/validators/account-validator-credentials";
 import { trpc } from "@/trpc/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { ZodError } from "zod";
 
 const Page = () => {
-
   const {
     register,
     handleSubmit,
@@ -21,12 +26,30 @@ const Page = () => {
     resolver: zodResolver(AuthCredentialsValidator),
   });
 
-  const {mutate,isLoading} =trpc.auth.createPayloadUser.useMutation({})
-  // console.log(data);
-  
-const onSubmit=({email,password}:TAuthCredentialsValidator)=>{
-mutate({email,password})
-}
+  const router = useRouter();
+
+  const { mutate, isLoading } = trpc.auth.createPayloadUser.useMutation({
+    onError: (err) => {
+      if (err.data?.code === "CONFLICT") {
+        toast.error("This email is already in use.Sign in instead?");
+      }
+      if (err instanceof ZodError) {
+        toast.error(err.issues[0].message);
+        return;
+      }
+      toast.error("Something went wrong. Please try again.");
+    },
+    onSuccess: ({ sentToEmail }) => {
+
+      
+      toast.success(`Verification email sent to ${sentToEmail? sentToEmail:'your email'}`);
+      router.push("/verify-email?to=" + sentToEmail);
+    },
+  });
+
+  const onSubmit = ({ email, password }: TAuthCredentialsValidator) => {
+    mutate({ email, password });
+  };
 
   return (
     <>
@@ -59,9 +82,11 @@ mutate({email,password})
                 <div className="grid gap-1 py-2"></div>
                 <Label htmlFor="password">Password</Label>
                 <Input
-                 {...register("password")}
-                 type="password"
-                  className={cn({ "focus-visible:ring-red-500": errors.password })}
+                  {...register("password")}
+                  type="password"
+                  className={cn({
+                    "focus-visible:ring-red-500": errors.password,
+                  })}
                   placeholder="*********"
                 />
                 <Button>Sign Up</Button>
