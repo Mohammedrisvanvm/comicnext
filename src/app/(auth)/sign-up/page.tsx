@@ -40,9 +40,9 @@ const Page = () => {
       toast.error("Something went wrong. Please try again.");
     },
     onSuccess: ({ sentToEmail }) => {
-
-      
-      toast.success(`Verification email sent to ${sentToEmail? sentToEmail:'your email'}`);
+      toast.success(
+        `Verification email sent to ${sentToEmail ? sentToEmail : "your email"}`
+      );
       router.push("/verify-email?to=" + sentToEmail);
     },
   });
@@ -60,7 +60,7 @@ const Page = () => {
             <h1 className="text-2xl font-bold">Create an account</h1>
             <Link
               href="/sign-in"
-              className={buttonVariants({ variant: "link" })}
+              className={buttonVariants({ variant: "link", className:"gap-1.5"})}
             >
               Already have account? Sign-in
               <ArrowRight className="h-4 w-4" />
@@ -77,6 +77,9 @@ const Page = () => {
                   className={cn({ "focus-visible:ring-red-500": errors.email })}
                   placeholder="you@example.com"
                 />
+                {errors?.email && (
+                  <p className="text-sm text-red-500">{errors.email.message}</p>
+                )}
               </div>
               <div className="grid gap-2">
                 <div className="grid gap-1 py-2"></div>
@@ -89,6 +92,9 @@ const Page = () => {
                   })}
                   placeholder="*********"
                 />
+                   {errors?.password && (
+                  <p className="text-sm text-red-500">{errors.password.message}</p>
+                )}
                 <Button>Sign Up</Button>
               </div>
             </form>
