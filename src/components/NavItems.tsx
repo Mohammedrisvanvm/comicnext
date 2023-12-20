@@ -1,3 +1,4 @@
+"use client"
 import { PRODUCT_CATEGORIES } from "@/config/intex";
 import { useEffect, useRef, useState } from "react";
 import NavItem from "./NavItem";

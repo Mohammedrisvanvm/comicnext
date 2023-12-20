@@ -1,14 +1,16 @@
-"use client";
-
 import Link from "next/link";
+import Cart from "./Cart";
 import { Icons } from "./Icons";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import NavItems from "./NavItems";
 import { buttonVariants } from "./ui/button";
-import Cart from "./Cart";
+import { getServerSideUser } from "@/lib/payload-util";
+import { cookies } from "next/headers";
 
-const Navbar = () => {
-  const user = null;
+const nextcookie = cookies();
+const Navbar = async () => {
+  const user = await getServerSideUser(nextcookie);
+
   return (
     <div className="bg-white sticky z-50 top-0 inset-x-0 h-16 ">
       <header className="relative bg-white">
@@ -40,15 +42,7 @@ const Navbar = () => {
                   {user ? null : (
                     <span className="h-6 w-px bg-gray-200" aria-hidden="true" />
                   )}
-                  {user ? (
-                    <Link
-                      href={"/sign-in"}
-                      className={buttonVariants({ variant: "ghost" })}
-                    >
-                      {" "}
-                      Sign In
-                    </Link>
-                  ) : (
+                  {user ? null : (
                     <Link
                       href={"/sign-up"}
                       className={buttonVariants({ variant: "ghost" })}
@@ -66,7 +60,9 @@ const Navbar = () => {
                     <span className="h-6 w-px bg-gray-200" aria-hidden="true" />
                   </div>
                 )}
-                <div className="ml-4 flow-root mr-6"><Cart/></div>
+                <div className="ml-4 flow-root mr-6">
+                  <Cart />
+                </div>
               </div>
             </div>
           </div>

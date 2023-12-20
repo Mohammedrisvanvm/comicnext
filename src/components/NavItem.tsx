@@ -1,3 +1,4 @@
+"use client"
 import { PRODUCT_CATEGORIES } from "@/config/intex";
 import { Button } from "./ui/button";
 import { ChevronDown } from "lucide-react";
