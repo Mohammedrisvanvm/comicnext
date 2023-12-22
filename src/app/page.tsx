@@ -1,5 +1,6 @@
 import { Icons } from "@/components/Icons";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+import ProductReel from "@/components/ProductReel";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   ArrowDownToLine,
@@ -133,6 +134,12 @@ export default function Home() {
             <Button variant={"ghost"}>Our Quality Promise &rarr;</Button>
           </div>
         </div>
+        <ProductReel
+          query={{ sort: "desc", limit: 4 }}
+          title="Brand New"
+          subtitle="new"
+          href="/products"
+        />
       </MaxWidthWrapper>
       <section className="border-t border-gray-200 bg-gray-50">
         <MaxWidthWrapper className="py-20">
