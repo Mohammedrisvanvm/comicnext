@@ -3,6 +3,7 @@ import { TQueryValidator } from "@/lib/validators/query-validator";
 import { Product } from "@/payload-types";
 import { trpc } from "@/trpc/client";
 import Link from "next/link";
+import ProductListing from "./ProductListing";
 
 interface productReelProps {
   title: string;
@@ -10,8 +11,11 @@ interface productReelProps {
   href?: string;
   query: TQueryValidator;
 }
+
 const FALLBACK_LIMIT = 4;
-const ProductReel = ({ title, subtitle, href, query }: productReelProps) => {
+
+const ProductReel = (props: productReelProps) => {
+  const { title, subtitle, href, query } = props;
   const { data: queryResult, isLoading } =
     trpc.getInfiniteProducts.useInfiniteQuery(
       {
@@ -20,14 +24,16 @@ const ProductReel = ({ title, subtitle, href, query }: productReelProps) => {
       },
       { getNextPageParam: (lastPage) => lastPage.nextpage }
     );
+
   const products = queryResult?.pages.flatMap((page) => page.items);
-  console.log(products);
+
   let map: (Product | null)[] = [];
   if (products && products.length) {
     map = products;
   } else if (isLoading) {
-    map = new Array<null>(query.limit || FALLBACK_LIMIT);
+    map = new Array<null>(query.limit ?? FALLBACK_LIMIT).fill(null);
   }
+
   return (
     <>
       <section className="py-12">
@@ -54,8 +60,8 @@ const ProductReel = ({ title, subtitle, href, query }: productReelProps) => {
         <div className="relative ">
           <div className="mt-6 flex items-center w-full">
             <div className="w-full grid grid-col-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 md:gap-y-10 lg:gap-x-8">
-              {map.map((product,i)=>(
-               <Productlisting/>
+              {map.map((product, i) => (
+                <ProductListing product={product} index={i} />
               ))}
             </div>
           </div>
