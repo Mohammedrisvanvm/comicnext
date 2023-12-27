@@ -1,7 +1,8 @@
 "use client";
 import { PRODUCT_CATEGORIES } from "@/config/intex";
 import { useCart } from "@/hooks/use-cart";
-import { formalPrice } from "@/lib/utils";
+import { formatPrice } from "@/lib/utils";
+
 import { Product } from "@/payload-types";
 import { ImageIcon, X } from "lucide-react";
 import Image from "next/image";
@@ -53,7 +54,7 @@ const CartItem = ({ product }: { product: Product }) => {
         </div>
         <div className="flex flex-col space-y-1 items-end font-medium ">
           <span className="ml-auto line-clamp-1 text-sm">
-            {formalPrice(product.price)}
+            {formatPrice(product.price)}
           </span>
         </div>
       </div>
