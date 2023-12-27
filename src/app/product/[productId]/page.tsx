@@ -111,7 +111,7 @@ const Page = async ({ params: { productId } }: productIdProps) => {
             <div>
               <div className="mt-10 px-4">
                 {" "}
-                <AddToCartButton />
+                <AddToCartButton product={product} />
               </div>
               <div className="mt-6 text-center">
                 <div className="group inline-flex text-sm text-medium">
