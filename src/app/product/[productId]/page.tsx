@@ -1,10 +1,12 @@
+import AddToCartButton from "@/components/AddToCartButton";
 import ImageSlider from "@/components/ImageSlider";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+import ProductReel from "@/components/ProductReel";
 import { PRODUCT_CATEGORIES } from "@/config/intex";
 import { getPayloadClient } from "@/get-payload";
 import { formalPrice } from "@/lib/utils";
 import { Label } from "@radix-ui/react-dropdown-menu";
-import { CheckIcon } from "lucide-react";
+import { CheckIcon, Shield } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -30,11 +32,11 @@ const Page = async ({ params: { productId } }: productIdProps) => {
   });
   const [product] = products;
   if (!product) return notFound();
-  console.log(product);
+
   const label = PRODUCT_CATEGORIES.find(
     ({ value }) => value === product.category
   )?.value;
-  console.log(label);
+
   const validUrls = product.images
     .map(({ image }) => (typeof image === "string" ? image : image.url))
     .filter(Boolean) as string[];
@@ -105,8 +107,33 @@ const Page = async ({ params: { productId } }: productIdProps) => {
               </div>{" "}
             </div>
           </div>
+          <div className="mt-10 lg:col-start-1 lg:row-start-2 lg:max-w-lg lg:self-start">
+            <div>
+              <div className="mt-10 px-4">
+                {" "}
+                <AddToCartButton />
+              </div>
+              <div className="mt-6 text-center">
+                <div className="group inline-flex text-sm text-medium">
+                  <Shield
+                    aria-hidden="true"
+                    className="mr-2 h-5 w-5 flex-shrink-0 text-gray-400"
+                  />
+                  <span className="text-muted-foreground hover:text-gray-700">
+                    30 Day Return Guarantee
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+      <ProductReel
+        href="/products"
+        query={{ category: product.category, limit: 4 }}
+        title={`similiar ${label}`}
+        subtitle={`Browse similiar high-quality ${label} just like '${product.name}'`}
+      />
     </MaxWidthWrapper>
   );
 };
