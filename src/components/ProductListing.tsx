@@ -4,7 +4,7 @@ import { Product } from "@/payload-types";
 import React from "react";
 import { Skeleton } from "./ui/skeleton";
 import Link from "next/link";
-import { cn, formalPrice } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 import { PRODUCT_CATEGORIES } from "@/config/intex";
 import ImageSlider from "./ImageSlider";
 
@@ -49,7 +49,7 @@ const ProductListing = ({ product, index }: ProductListingProps) => {
           </h3>
           <p className="mt-1 text-sm text-gray-500">{label}</p>
           <p className="mt-1 font-medium text-sm text-grey-900">
-            {formalPrice(product.price)}
+            {formatPrice(product.price)}
           </p>
         </div>
       </Link>

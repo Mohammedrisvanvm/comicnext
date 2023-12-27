@@ -4,7 +4,7 @@ import { twMerge } from "tailwind-merge";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
-export function formalPrice(
+export function formatPrice(
   price: number | string,
   option: {
     currency?: "USD" | "EUR" | "GBP" | "INR";
