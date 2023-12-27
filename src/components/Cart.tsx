@@ -9,21 +9,31 @@ import {
   SheetTrigger,
 } from "./ui/sheet";
 import { Separator } from "./ui/separator";
-import { cn, formalPrice } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 import Link from "next/link";
 import { buttonVariants } from "./ui/button";
 import Image from "next/image";
 import { useCart } from "@/hooks/use-cart";
 import { ScrollArea } from "./ui/scroll-area";
+import CartItem from "./CartItem";
+import { useEffect, useState } from "react";
 
 export const Cart = () => {
   const { items } = useCart();
+
+
   const itemcount = items.length;
+
+const [isMounted,setIsMounted]=useState<boolean>(false)
+
+useEffect(()=>{
+setIsMounted(true)
+},[])
   const cartTotal = items.reduce(
     (total, { product }) => total + product.price,
     0
   );
-  const fee = 100;
+  const fee = 1;
   return (
     <Sheet>
       <SheetTrigger className="group -m-2 flex items-center p-2">
@@ -33,7 +43,7 @@ export const Cart = () => {
         ></ShoppingCart>
 
         <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
-          {itemcount}
+          {isMounted?itemcount:0}
         </span>
       </SheetTrigger>
       <SheetContent className="flex w-full flex-col pr-0  sm:max-w-lg ">
@@ -43,8 +53,8 @@ export const Cart = () => {
             <>
               <div className="flex w-full  pr-6 ">
                 <ScrollArea>
-                  {items.map((product) => (
-                    <CartItem />
+                  {items.map(({ product }) => (
+                    <CartItem key={product.id} product={product} />
                   ))}
                 </ScrollArea>
               </div>
@@ -57,11 +67,11 @@ export const Cart = () => {
                   </div>
                   <div className="flex justify-between ">
                     <span> Transaction Fee</span>
-                    <span>{formalPrice(fee)}</span>
+                    <span>{formatPrice(fee)}</span>
                   </div>
                   <div className="flex justify-between ">
                     <span> Total</span>
-                    <span>{formalPrice(cartTotal + fee)}</span>
+                    <span>{formatPrice(cartTotal + fee)}</span>
                   </div>
                 </div>
                 <SheetFooter>

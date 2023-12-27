@@ -5,7 +5,7 @@ import { useCart } from "@/hooks/use-cart";
 import { Product } from "@/payload-types";
 
 const AddToCartButton = ({product}:{product:Product}) => {
-  const {addItem} =useCart()
+  const {clearCart,addItem} =useCart()
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
   useEffect(() => {
@@ -20,6 +20,7 @@ const AddToCartButton = ({product}:{product:Product}) => {
     <Button
       onClick={() => {
         addItem(product)
+        // clearCart()
         setIsSuccess(true);
       }}
       size="lg"
