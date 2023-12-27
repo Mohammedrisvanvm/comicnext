@@ -13,9 +13,16 @@ import { cn, formalPrice } from "@/lib/utils";
 import Link from "next/link";
 import { buttonVariants } from "./ui/button";
 import Image from "next/image";
+import { useCart } from "@/hooks/use-cart";
+import { ScrollArea } from "./ui/scroll-area";
 
 export const Cart = () => {
-  const itemcount = 1;
+  const { items } = useCart();
+  const itemcount = items.length;
+  const cartTotal = items.reduce(
+    (total, { product }) => total + product.price,
+    0
+  );
   const fee = 100;
   return (
     <Sheet>
@@ -34,7 +41,13 @@ export const Cart = () => {
           <SheetTitle>Cart ({itemcount})</SheetTitle>
           {itemcount > 0 ? (
             <>
-              <div className="flex w-full  pr-6 ">cart items</div>
+              <div className="flex w-full  pr-6 ">
+                <ScrollArea>
+                  {items.map((product) => (
+                    <CartItem />
+                  ))}
+                </ScrollArea>
+              </div>
               <div className="space-y-4 pr-6">
                 <Separator />
                 <div className="space-y-6 text-small">
@@ -48,7 +61,7 @@ export const Cart = () => {
                   </div>
                   <div className="flex justify-between ">
                     <span> Total</span>
-                    <span>{formalPrice(fee)}</span>
+                    <span>{formalPrice(cartTotal + fee)}</span>
                   </div>
                 </div>
                 <SheetFooter>
