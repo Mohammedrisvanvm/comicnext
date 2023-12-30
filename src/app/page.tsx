@@ -1,5 +1,5 @@
+import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import { Icons } from "@/components/Icons";
-import MaxWidthWrapper from "../components/MaxWidthWrapper";
 import ProductReel from "@/components/ProductReel";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
