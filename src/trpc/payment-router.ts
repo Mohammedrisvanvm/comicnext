@@ -11,37 +11,43 @@ export const paymentRouter = router({
     .mutation(async ({ ctx, input }) => {
       const { user } = ctx;
       let { productIds } = input;
+      console.log(user, productIds);
+
       if (productIds.length === 0) {
         throw new TRPCError({ code: "BAD_REQUEST" });
       }
 
       const payload = await getPayloadClient();
+
       const { docs: products } = await payload.find({
         collection: "products",
         where: {
-          id: { in: productIds },
+          id: {
+            in: productIds,
+          },
         },
       });
 
-      const filteredProducts = products.filter((prod) => Boolean(prod.id));
+      const filteredProducts = products.filter((prod) => Boolean(prod.priceId));
 
       const order = await payload.create({
         collection: "orders",
         data: {
           _isPaid: false,
-          products: filteredProducts,
+          products: filteredProducts.map((prod) => prod.id),
           user: user.id,
         },
       });
+
       const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
 
-      filteredProducts.forEach((product)=>{
+      filteredProducts.forEach((product) => {
         line_items.push({
-            price:product.priceId!,
-            quantity:1,
+          price: product.priceId!,
+          quantity: 1,
+        });
+      });
 
-        })
-      })
       line_items.push({
         price: "price_1OSfZfSB4nIKGKGXvFe4CYVZ",
         quantity: 1,
@@ -49,11 +55,12 @@ export const paymentRouter = router({
           enabled: false,
         },
       });
+
       try {
-        const stripeSession =await stripe.checkout.sessions.create({
+        const stripeSession = await stripe.checkout.sessions.create({
           success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/thank-you?orderId=${order.id}`,
           cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/cart`,
-          payment_method_types: ["card", "paypal"],
+          payment_method_types: ["card"],
           mode: "payment",
           metadata: {
             userId: user.id,
@@ -61,11 +68,12 @@ export const paymentRouter = router({
           },
           line_items,
         });
-        return {url:stripeSession.url}
-      } catch (error) {
-        console.log(error)
-        return {url:null}
-        
+
+        return { url: stripeSession.url };
+      } catch (err) {
+        console.log(err);
+
+        return { url: null };
       }
     }),
 });
