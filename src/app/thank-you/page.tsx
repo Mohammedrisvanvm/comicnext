@@ -25,7 +25,12 @@ const ThankYouPage = async ({ searchParams }: PageProps) => {
   const [order] = orders;
   console.log(order);
   if (!order) return notFound();
+  const orderUserId =
+    typeof order.user === "string" ? order.user : order.user.id;
 
+  if (!orderUserId) {
+    return redirect(`/sign-in?origin=thank-you?orderId=${order.id}`);
+  }
 
   return (
     <main className="relative lg:min-h-full">
