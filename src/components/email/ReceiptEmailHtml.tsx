@@ -15,6 +15,7 @@ import {
   Text,
   render,
 } from "@react-email/components";
+import * as React from "react";
 import { format } from "date-fns";
 
 interface ReceiptEmailProps {
@@ -165,8 +166,6 @@ const ReceiptEmail = ({
     </Html>
   );
 };
-
-
 
 export const ReceiptEmailHtml = (props: ReceiptEmailProps) =>
   render(<ReceiptEmail {...props} />, { pretty: true });
