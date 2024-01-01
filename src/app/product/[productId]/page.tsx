@@ -1,6 +1,6 @@
-import MaxWidthWrapper from '@/components/MaxWidthWrapper'
 import AddToCartButton from '@/components/AddToCartButton'
 import ImageSlider from '@/components/ImageSlider'
+import MaxWidthWrapper from '@/components/MaxWidthWrapper'
 import ProductReel from '@/components/ProductReel'
 import { PRODUCT_CATEGORIES } from '@/config/intex'
 import { getPayloadClient } from '@/get-payload'

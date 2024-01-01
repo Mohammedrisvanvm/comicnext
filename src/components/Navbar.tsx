@@ -1,6 +1,5 @@
 
 import Link from "next/link";
-import MaxWidthWrapper from "./MaxWidthWrapper";
 import Cart from "./Cart";
 import { Icons } from "./Icons";
 import NavItems from "./NavItems";
@@ -8,6 +7,7 @@ import { buttonVariants } from "./ui/button";
 import { getServerSideUser } from "@/lib/payload-util";
 import { cookies } from "next/headers";
 import UserAccountNav from "./UserAccountNav";
+import MaxWidthWrapper from "./MaxWidthWrapper";
 
 const Navbar = async () => {
   const nextcookie = cookies();
