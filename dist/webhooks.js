@@ -40,7 +40,7 @@ exports.stripeWebhookHandler = void 0;
 var stripe_1 = require("./lib/stripe");
 var get_payload_1 = require("./get-payload");
 var resend_1 = require("resend");
-var ReceiptEmailHtml_1 = require("./components/email/ReceiptEmailHtml");
+var ReceiptEmail_1 = require("./components/emails/ReceiptEmail");
 var resend = new resend_1.Resend(process.env.RESEND_API_KEY);
 var stripeWebhookHandler = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var webhookRequest, body, signature, event, session, payload, users, user, orders, order, data, error_1;
@@ -123,10 +123,10 @@ var stripeWebhookHandler = function (req, res) { return __awaiter(void 0, void 0
             case 5:
                 _c.trys.push([5, 7, , 8]);
                 return [4 /*yield*/, resend.emails.send({
-                        from: 'ComicNext <risvanrishu0000.com>',
+                        from: 'DigitalHippo <hello@joshtriedcoding.com>',
                         to: [user.email],
                         subject: 'Thanks for your order! This is your receipt.',
-                        html: (0, ReceiptEmailHtml_1.ReceiptEmailHtml)({
+                        html: (0, ReceiptEmail_1.ReceiptEmailHtml)({
                             date: new Date(),
                             email: user.email,
                             orderId: session.metadata.orderId,

@@ -1,12 +1,12 @@
 import { z } from "zod";
-import { privateprocedure, publicProcedure, router } from "./trpc";
 import { TRPCError } from "@trpc/server";
 import { getPayloadClient } from "../get-payload";
 import { stripe } from "../lib/stripe";
 import type Stripe from "stripe";
+import { privateProcedure, router } from "./trpc";
 
 export const paymentRouter = router({
-  createSession: privateprocedure
+  createSession: privateProcedure
     .input(z.object({ productIds: z.array(z.string()) }))
     .mutation(async ({ ctx, input }) => {
       const { user } = ctx;
@@ -76,7 +76,7 @@ export const paymentRouter = router({
         return { url: null };
       }
     }),
-  pollOrderStatus: privateprocedure
+  pollOrderStatus: privateProcedure
     .input(z.object({ orderId: z.string() }))
     .query(async({ input }) => {
       const { orderId } = input;

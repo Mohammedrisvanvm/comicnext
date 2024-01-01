@@ -38,12 +38,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.paymentRouter = void 0;
 var zod_1 = require("zod");
-var trpc_1 = require("./trpc");
 var server_1 = require("@trpc/server");
 var get_payload_1 = require("../get-payload");
 var stripe_1 = require("../lib/stripe");
+var trpc_1 = require("./trpc");
 exports.paymentRouter = (0, trpc_1.router)({
-    createSession: trpc_1.privateprocedure
+    createSession: trpc_1.privateProcedure
         .input(zod_1.z.object({ productIds: zod_1.z.array(zod_1.z.string()) }))
         .mutation(function (_a) {
         var ctx = _a.ctx, input = _a.input;
@@ -122,7 +122,7 @@ exports.paymentRouter = (0, trpc_1.router)({
             });
         });
     }),
-    pollOrderStatus: trpc_1.privateprocedure
+    pollOrderStatus: trpc_1.privateProcedure
         .input(zod_1.z.object({ orderId: zod_1.z.string() }))
         .query(function (_a) {
         var input = _a.input;

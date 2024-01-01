@@ -57,19 +57,16 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.appRouter = void 0;
 var zod_1 = require("zod");
-var auth_router_1 = __importDefault(require("./auth-router"));
+var auth_router_1 = require("./auth-router");
 var trpc_1 = require("./trpc");
 var query_validator_1 = require("../lib/validators/query-validator");
 var get_payload_1 = require("../get-payload");
 var payment_router_1 = require("./payment-router");
 exports.appRouter = (0, trpc_1.router)({
-    auth: auth_router_1.default,
+    auth: auth_router_1.authRouter,
     payment: payment_router_1.paymentRouter,
     getInfiniteProducts: trpc_1.publicProcedure
         .input(zod_1.z.object({
@@ -80,28 +77,28 @@ exports.appRouter = (0, trpc_1.router)({
         .query(function (_a) {
         var input = _a.input;
         return __awaiter(void 0, void 0, void 0, function () {
-            var query, cursor, sort, limit, QueryOpts, payload, parseQueryOpts, page, _b, items, hasNextPage, nextPage;
+            var query, cursor, sort, limit, queryOpts, payload, parsedQueryOpts, page, _b, items, hasNextPage, nextPage;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
                         query = input.query, cursor = input.cursor;
-                        sort = query.sort, limit = query.limit, QueryOpts = __rest(query, ["sort", "limit"]);
+                        sort = query.sort, limit = query.limit, queryOpts = __rest(query, ["sort", "limit"]);
                         return [4 /*yield*/, (0, get_payload_1.getPayloadClient)()];
                     case 1:
                         payload = _c.sent();
-                        parseQueryOpts = {};
-                        Object.entries(QueryOpts).forEach(function (_a) {
+                        parsedQueryOpts = {};
+                        Object.entries(queryOpts).forEach(function (_a) {
                             var key = _a[0], value = _a[1];
-                            parseQueryOpts[key] = {
+                            parsedQueryOpts[key] = {
                                 equals: value,
                             };
                         });
                         page = cursor || 1;
                         return [4 /*yield*/, payload.find({
-                                collection: "products",
+                                collection: 'products',
                                 where: __assign({ approvedForSale: {
-                                        equals: "approved",
-                                    } }, parseQueryOpts),
+                                        equals: 'approved',
+                                    } }, parsedQueryOpts),
                                 sort: sort,
                                 depth: 1,
                                 limit: limit,
@@ -111,7 +108,7 @@ exports.appRouter = (0, trpc_1.router)({
                         _b = _c.sent(), items = _b.docs, hasNextPage = _b.hasNextPage, nextPage = _b.nextPage;
                         return [2 /*return*/, {
                                 items: items,
-                                nextpage: hasNextPage ? nextPage : null,
+                                nextPage: hasNextPage ? nextPage : null,
                             }];
                 }
             });

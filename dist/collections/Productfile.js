@@ -65,17 +65,17 @@ var addUser = function (_a) {
 var yourOwnAndPurchased = function (_a) {
     var req = _a.req;
     return __awaiter(void 0, void 0, void 0, function () {
-        var user, products, ownProductFileIds, orders, purchaseProductIds;
+        var user, products, ownProductFileIds, orders, purchasedProductFileIds;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     user = req.user;
-                    if ((user === null || user === void 0 ? void 0 : user.role) === "admin")
+                    if ((user === null || user === void 0 ? void 0 : user.role) === 'admin')
                         return [2 /*return*/, true];
                     if (!user)
                         return [2 /*return*/, false];
                     return [4 /*yield*/, req.payload.find({
-                            collection: "products",
+                            collection: 'products',
                             depth: 0,
                             where: {
                                 user: {
@@ -86,10 +86,10 @@ var yourOwnAndPurchased = function (_a) {
                 case 1:
                     products = (_b.sent()).docs;
                     ownProductFileIds = products
-                        .map(function (product) { return product.product_files; })
+                        .map(function (prod) { return prod.product_files; })
                         .flat();
                     return [4 /*yield*/, req.payload.find({
-                            collection: "orders",
+                            collection: 'orders',
                             depth: 2,
                             where: {
                                 user: {
@@ -99,13 +99,12 @@ var yourOwnAndPurchased = function (_a) {
                         })];
                 case 2:
                     orders = (_b.sent()).docs;
-                    purchaseProductIds = orders
+                    purchasedProductFileIds = orders
                         .map(function (order) {
                         return order.products.map(function (product) {
-                            if (typeof product === "string") {
-                                return req.payload.logger.error("search depth not sufficient to find purchased file IDs");
-                            }
-                            return typeof product.product_files === "string"
+                            if (typeof product === 'string')
+                                return req.payload.logger.error('Search depth not sufficient to find purchased file IDs');
+                            return typeof product.product_files === 'string'
                                 ? product.product_files
                                 : product.product_files.id;
                         });
@@ -114,7 +113,7 @@ var yourOwnAndPurchased = function (_a) {
                         .flat();
                     return [2 /*return*/, {
                             id: {
-                                in: __spreadArray(__spreadArray([], ownProductFileIds, true), purchaseProductIds, true),
+                                in: __spreadArray(__spreadArray([], ownProductFileIds, true), purchasedProductFileIds, true),
                             },
                         }];
             }
@@ -122,11 +121,11 @@ var yourOwnAndPurchased = function (_a) {
     });
 };
 exports.ProductFiles = {
-    slug: "product_files",
+    slug: 'product_files',
     admin: {
         hidden: function (_a) {
             var user = _a.user;
-            return user.role !== "admin";
+            return user.role !== 'admin';
         },
     },
     hooks: {
@@ -136,23 +135,27 @@ exports.ProductFiles = {
         read: yourOwnAndPurchased,
         update: function (_a) {
             var req = _a.req;
-            return req.user.role === "admin";
+            return req.user.role === 'admin';
         },
         delete: function (_a) {
             var req = _a.req;
-            return req.user.role === "admin";
+            return req.user.role === 'admin';
         },
     },
     upload: {
-        staticURL: "/product_files",
-        staticDir: "product_files",
-        mimeTypes: ["image/*", "font/*", "application/postscript"],
+        staticURL: '/product_files',
+        staticDir: 'product_files',
+        mimeTypes: [
+            'image/*',
+            'font/*',
+            'application/postscript',
+        ],
     },
     fields: [
         {
-            name: "user",
-            type: "relationship",
-            relationTo: "users",
+            name: 'user',
+            type: 'relationship',
+            relationTo: 'users',
             admin: {
                 condition: function () { return false; },
             },

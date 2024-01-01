@@ -13,11 +13,14 @@ import { ArrowRight, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 
-
-import { AuthCredentialsValidator, TAuthCredentialsValidator } from '@/lib/validators/account-validator-credentials'
+import {
+  AuthCredentialsValidator,
+  TAuthCredentialsValidator,
+} from '@/lib/validators/account-credentials-validator'
 import { trpc } from '@/trpc/client'
-import { useRouter, useSearchParams } from 'next/navigation'
 import { toast } from 'sonner'
+import { ZodError } from 'zod'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 const Page = () => {
   const searchParams = useSearchParams()

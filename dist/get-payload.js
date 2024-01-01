@@ -56,7 +56,16 @@ var path_1 = __importDefault(require("path"));
 var payload_1 = __importDefault(require("payload"));
 var nodemailer_1 = __importDefault(require("nodemailer"));
 dotenv_1.default.config({
-    path: path_1.default.resolve(__dirname, "../.env"),
+    path: path_1.default.resolve(__dirname, '../.env'),
+});
+var transporter = nodemailer_1.default.createTransport({
+    host: 'smtp.resend.com',
+    secure: true,
+    port: 465,
+    auth: {
+        user: 'resend',
+        pass: process.env.RESEND_API_KEY,
+    },
 });
 var cached = global.payload;
 if (!cached) {
@@ -65,33 +74,24 @@ if (!cached) {
         promise: null,
     };
 }
-var transport = nodemailer_1.default.createTransport({
-    host: "smtp.resend.com",
-    secure: true,
-    port: 465,
-    auth: {
-        user: "resend",
-        pass: process.env.RESEND_API_KEY,
-    },
-});
 var getPayloadClient = function (_a) {
     var _b = _a === void 0 ? {} : _a, initOptions = _b.initOptions;
     return __awaiter(void 0, void 0, void 0, function () {
-        var _c, error_1;
+        var _c, e_1;
         return __generator(this, function (_d) {
             switch (_d.label) {
                 case 0:
                     if (!process.env.PAYLOAD_SECRET) {
-                        throw new Error("payload secret missing");
+                        throw new Error('PAYLOAD_SECRET is missing');
                     }
                     if (cached.client) {
                         return [2 /*return*/, cached.client];
                     }
                     if (!cached.promise) {
                         cached.promise = payload_1.default.init(__assign({ email: {
-                                transport: transport,
-                                fromAddress: "onboarding@resend.dev",
-                                fromName: "comicnext",
+                                transport: transporter,
+                                fromAddress: 'hello@joshtriedcoding.com',
+                                fromName: 'DigitalHippo',
                             }, secret: process.env.PAYLOAD_SECRET, local: (initOptions === null || initOptions === void 0 ? void 0 : initOptions.express) ? false : true }, (initOptions || {})));
                     }
                     _d.label = 1;
@@ -103,9 +103,9 @@ var getPayloadClient = function (_a) {
                     _c.client = _d.sent();
                     return [3 /*break*/, 4];
                 case 3:
-                    error_1 = _d.sent();
+                    e_1 = _d.sent();
                     cached.promise = null;
-                    throw error_1;
+                    throw e_1;
                 case 4: return [2 /*return*/, cached.client];
             }
         });

@@ -25,7 +25,7 @@ const ProductReel = (props: ProductReelProps) => {
         query,
       },
       {
-        getNextPageParam: (lastPage) => lastPage.nextpage,
+        getNextPageParam: (lastPage) => lastPage.nextPage,
       }
     )
 

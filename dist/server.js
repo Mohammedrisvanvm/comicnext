@@ -64,14 +64,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var get_payload_1 = require("./get-payload");
+var next_utils_1 = require("./next-utils");
 var trpcExpress = __importStar(require("@trpc/server/adapters/express"));
 var trpc_1 = require("./trpc");
 var body_parser_1 = __importDefault(require("body-parser"));
+var webhooks_1 = require("./webhooks");
 var build_1 = __importDefault(require("next/dist/build"));
 var path_1 = __importDefault(require("path"));
 var url_1 = require("url");
-var webhook_1 = require("./webhook");
-var next_utils_1 = require("./next.utils");
 var app = (0, express_1.default)();
 var PORT = Number(process.env.PORT) || 3000;
 var createContext = function (_a) {
@@ -91,7 +91,7 @@ var start = function () { return __awaiter(void 0, void 0, void 0, function () {
                         req.rawBody = buffer;
                     },
                 });
-                app.post('/api/webhooks/stripe', webhookMiddleware, webhook_1.stripeWebhookHandler);
+                app.post('/api/webhooks/stripe', webhookMiddleware, webhooks_1.stripeWebhookHandler);
                 return [4 /*yield*/, (0, get_payload_1.getPayloadClient)({
                         initOptions: {
                             express: app,
